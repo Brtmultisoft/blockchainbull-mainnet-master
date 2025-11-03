@@ -179,6 +179,7 @@ const useMLMData = (wallet, chainId, switchChain, setError, setIsLoading) => {
       // Fetch stakes if user has stakes (stakeCount > 0)
       // If user has stakes, they must be registered, so we fetch regardless of isRegistered flag
       const stakeCount = Number(userRecord.stakeCount);
+      console.log("stakeCount", stakeCount);
       if (stakeCount > 0) {
         for (let i = 0; i < stakeCount; i++) {
           console.log(`\n📌 Processing stake #${i}...`);
