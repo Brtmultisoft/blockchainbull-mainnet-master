@@ -176,8 +176,11 @@ const useMLMData = (wallet, chainId, switchChain, setError, setIsLoading) => {
       console.log("User stake count:", userRecord.stakeCount);
 
       console.log("userRecord", userRecord);
-      if (userRecord.referrer !== '0x0000000000000000000000000000000000000000' && Number(userRecord.stakeCount) > 0) {
-        for (let i = 0; i < Number(userRecord.stakeCount); i++) {
+      // Fetch stakes if user has stakes (stakeCount > 0)
+      // If user has stakes, they must be registered, so we fetch regardless of isRegistered flag
+      const stakeCount = Number(userRecord.stakeCount);
+      if (stakeCount > 0) {
+        for (let i = 0; i < stakeCount; i++) {
           console.log(`\n📌 Processing stake #${i}...`);
           try {
             const stake = await dwcContractInteractions.getStakeRecord(
@@ -199,20 +202,20 @@ const useMLMData = (wallet, chainId, switchChain, setError, setIsLoading) => {
             const packagePrice = await dwcContractInteractions.getPackagePrice(
               BigInt(adjustedPackageIndex)
             );
-            if (!packagePrice) {
-              console.error(`No package price for index ${adjustedPackageIndex}`);
-              continue;
-            }
-            console.log("💰 Package price (raw):", packagePrice.toString());
+            // if (!packagePrice) {
+            //   console.error(`No package price for index ${adjustedPackageIndex}`);
+            //   continue;
+            // }
+            // console.log("💰 Package price (raw):", packagePrice.toString());
 
             const roiPercent = await dwcContractInteractions.getRoiPercent(
               BigInt(adjustedPackageIndex)
             );
-            if (!roiPercent) {
-              console.error(`No ROI percent for index ${adjustedPackageIndex}`);
-              continue;
-            }
-            console.log("📈 ROI Percent:", roiPercent.toString());
+            // if (!roiPercent) {
+            //   console.error(`No ROI percent for index ${adjustedPackageIndex}`);
+            //   continue;
+            // }
+            // console.log("📈 ROI Percent:", roiPercent.toString());
 
             const claimable = await dwcContractInteractions.calculateClaimAble(
               wallet.account,
